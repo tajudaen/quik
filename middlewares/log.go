@@ -7,10 +7,10 @@ import (
 
 func LogsMiddleware(logger *logrus.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		logger.Info("router middleware",map[string]interface{}{
+		logger.Info("router middleware", map[string]interface{}{
 			"method": c.Request.Method,
-			"url": c.Request.URL.String(),
-			"data": c.Request.Body,
+			"url":    c.Request.URL.String(),
+			"data":   c.Request.Body,
 		},
 		)
 		c.Next()

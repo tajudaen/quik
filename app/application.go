@@ -2,11 +2,15 @@ package app
 
 import (
 	"fmt"
+	"log"
 
-	"github.com/gin-gonic/gin"
 	"quik/config"
 	"quik/middlewares"
 	"quik/providers/logger"
+	"quik/utils/errors"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -17,5 +21,13 @@ func StartApplication() {
 	router.Use(gin.Recovery())
 
 	router.Use(middlewares.LogsMiddleware(logger.Log))
-	router.Run(fmt.Sprintf(":%s", config.C.Port))
+	router.Use(cors.Default())
+
+	router.NoRoute(func(c *gin.Context) {
+		errors.NotFoundAPIError(c)
+	})
+
+	if err := router.Run(fmt.Sprintf(":%s", config.C.Port)); err != nil {
+		log.Fatalf("Can't run the server, err: %v\n", err)
+	}
 }
