@@ -14,7 +14,6 @@ var (
 )
 
 func StartApplication() {
-	router.Use(gin.Recovery())
 
 	router.Use(middlewares.LogsMiddleware(logger.Log))
 	router.Run(fmt.Sprintf(":%s", config.C.Port))
