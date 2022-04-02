@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	Port     string
+	LogLevel string
 }
 
 var C Config
@@ -23,5 +24,6 @@ func init() {
 
 	C = Config{
 		Port:     os.Getenv("PORT"),
+		LogLevel: os.Getenv("LOG_LEVEL"),
 	}
 }
