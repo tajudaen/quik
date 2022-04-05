@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sirupsen/logrus"
 	"quik/config"
+
+	"github.com/sirupsen/logrus"
 )
 
 var (

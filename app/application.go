@@ -5,9 +5,9 @@ import (
 	"log"
 
 	"quik/config"
+	"quik/logger"
 	"quik/middlewares"
-	"quik/providers/logger"
-	"quik/utils/errors"
+	"quik/utils"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -18,13 +18,14 @@ var (
 )
 
 func StartApplication() {
+	registerRoutes()
 	router.Use(gin.Recovery())
 
 	router.Use(middlewares.LogsMiddleware(logger.Log))
 	router.Use(cors.Default())
 
 	router.NoRoute(func(c *gin.Context) {
-		errors.NotFoundAPIError(c)
+		utils.NotFoundAPIError(c)
 	})
 
 	if err := router.Run(fmt.Sprintf(":%s", config.C.Port)); err != nil {

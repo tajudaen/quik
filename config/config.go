@@ -8,8 +8,12 @@ import (
 )
 
 type Config struct {
-	Port     string
-	LogLevel string
+	Port          string
+	LogLevel      string
+	MySQLUserName string
+	MySQLPassword string
+	MySQLHost     string
+	MySQLSchema   string
 }
 
 var C Config
@@ -23,7 +27,11 @@ func init() {
 	}
 
 	C = Config{
-		Port:     os.Getenv("PORT"),
-		LogLevel: os.Getenv("LOG_LEVEL"),
+		Port:          os.Getenv("PORT"),
+		LogLevel:      os.Getenv("LOG_LEVEL"),
+		MySQLUserName: os.Getenv("MySQL_USERNAME"),
+		MySQLPassword: os.Getenv("MySQL_PASSWORD"),
+		MySQLHost:     os.Getenv("MySQL_HOST"),
+		MySQLSchema:   os.Getenv("MySQL_SCHEMA"),
 	}
 }
