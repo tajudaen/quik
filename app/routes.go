@@ -20,5 +20,6 @@ func registerRoutes() {
 	{
 		wallets := v1.Group("/wallets/")
 		wallets.GET("/:wallet_id/balance", wc.GetWalletBalance)
+		wallets.POST("/:wallet_id/credit", wc.CreditWallet)
 	}
 }
