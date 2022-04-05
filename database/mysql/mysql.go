@@ -17,6 +17,11 @@ var (
 	client *sql.DB
 	MySQL  database.Storage = &mySQL{}
 )
+const (
+	queryGetWallet              = "SELECT id, user_id, balance FROM quik.wallets WHERE id=?;"
+	queryIncreaseBalance             = "UPDATE  quik.wallets SET balance = balance + ? WHERE id=?;"
+	queryDecreaseBalance         =   "UPDATE  quik.wallets SET balance = balance - ? WHERE id=?;"
+)
 
 func init() {
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8",
@@ -39,7 +44,7 @@ type mySQL struct {
 }
 
 func (m *mySQL) GetWallet(wallet_id int64) (*utils.Wallet, *utils.RestErr) {
-	stmt, err := client.Prepare("SELECT id, user_id, balance FROM quik.wallets WHERE id=?")
+	stmt, err := client.Prepare(queryGetWallet)
 
 	if err != nil {
 		logger.Error("error when trying to prepare get wallet query", err, nil)
@@ -61,7 +66,7 @@ func (m *mySQL) GetWallet(wallet_id int64) (*utils.Wallet, *utils.RestErr) {
 }
 
 func (m *mySQL) IncreaseWalletBalance(wallet_id int64, amount int64) *utils.RestErr {
-	stmt, err := client.Prepare("UPDATE  quik.wallets SET balance = balance + ? WHERE id=?")
+	stmt, err := client.Prepare(queryIncreaseBalance)
 
 	if err != nil {
 		logger.Error("error when trying to prepare get wallet query", err, nil)
@@ -87,7 +92,7 @@ func (m *mySQL) IncreaseWalletBalance(wallet_id int64, amount int64) *utils.Rest
 }
 
 func (m *mySQL) DecreaseWalletBalance(wallet_id int64, amount int64) *utils.RestErr {
-	stmt, err := client.Prepare("UPDATE  quik.wallets SET balance = balance - ? WHERE id=?")
+	stmt, err := client.Prepare(queryDecreaseBalance)
 
 	if err != nil {
 		logger.Error("error when trying to prepare get wallet query", err, nil)

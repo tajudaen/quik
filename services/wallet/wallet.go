@@ -43,7 +43,7 @@ func (s *WalletService) DebitWallet(wallet_id, amount int64) *utils.RestErr {
 	}
 
 	if amount > result.Balance {
- 		return errors.NewInsufficientError("insufficient wallet balance")
+		return errors.NewInsufficientError("insufficient wallet balance")
 	}
 	err = s.DecreaseWalletBalance(wallet_id, amount)
 
