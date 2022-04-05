@@ -1,6 +1,7 @@
 package app
 
 import (
+	"quik/controllers/auth"
 	walletController "quik/controllers/wallet"
 	"quik/database/mysql"
 	walletDomain "quik/domain/wallet"
@@ -22,8 +23,12 @@ func registerRoutes() {
 	v1 := router.Group("/api/v1/")
 	{
 		wallets := v1.Group("/wallets/")
+		wallets.Use(middlewares.JWTAuthMiddleware())
 		wallets.GET("/:wallet_id/balance", middlewares.CacheBalance(), wc.GetWalletBalance)
 		wallets.POST("/:wallet_id/credit", wc.CreditWallet)
 		wallets.POST("/:wallet_id/debit", wc.DebitWallet)
+	}
+	{
+		v1.POST("/login", auth.Login)
 	}
 }
