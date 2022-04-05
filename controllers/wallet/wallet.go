@@ -70,6 +70,43 @@ func (w *WalletController) CreditWallet(c *gin.Context) {
 	utils.APISuccess(c, 200, gin.H{"message": "success"})
 }
 
+func (w *WalletController) DebitWallet(c *gin.Context) {
+	wallet_id, IdErr := getWalletId(c.Param("wallet_id"))
+	if IdErr != nil {
+		utils.APIError(c, IdErr)
+		return
+	}
+
+	var data types.CreditRequest
+	input := json.NewDecoder(c.Request.Body)
+
+	if err := input.Decode(&data); err != nil {
+		logger.Error(
+			"error while unmarshaling debit data",
+			err, map[string]interface{}{
+				"method": c.Request.Method,
+				"url":    c.Request.URL.String(),
+				"data":   c.Request.Body,
+			})
+
+		utils.InvalidRequestBodyAPIError(c)
+		return
+	}
+
+	if ok, errValidate := utils.StructValidateHelper(data); ok {
+		utils.RequestValidationAPIError(c, errValidate[0])
+		return
+	}
+
+	err := w.WalletServiceInterface.DebitWallet(wallet_id, data.Amount)
+	if err != nil {
+		utils.APIError(c, err)
+		return
+	}
+
+	utils.APISuccess(c, 200, gin.H{"message": "success"})
+}
+
 func getWalletId(wallet_id string) (int64, *utils.RestErr) {
 	walletId, err := strconv.ParseInt(wallet_id, 10, 64)
 	if err != nil {

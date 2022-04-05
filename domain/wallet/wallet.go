@@ -18,6 +18,7 @@ type Wallet_DAO struct {
 type WalletDAOInterface interface {
 	Get(int64) (*Wallet, *utils.RestErr)
 	IncreaseWalletBalance(int64, int64) *utils.RestErr
+	DecreaseWalletBalance(int64, int64) *utils.RestErr
 }
 
 func (w *Wallet_DAO) Get(wallet_id int64) (*Wallet, *utils.RestErr) {
@@ -33,6 +34,14 @@ func (w *Wallet_DAO) Get(wallet_id int64) (*Wallet, *utils.RestErr) {
 
 func (w *Wallet_DAO) IncreaseBalance(wallet_id, amount int64) *utils.RestErr {
 	err := w.IncreaseWalletBalance(wallet_id, amount)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (w *Wallet_DAO) DecreaseBalance(wallet_id, amount int64) *utils.RestErr {
+	err := w.DecreaseWalletBalance(wallet_id, amount)
 	if err != nil {
 		return err
 	}

@@ -85,3 +85,29 @@ func (m *mySQL) IncreaseWalletBalance(wallet_id int64, amount int64) *utils.Rest
 
 	return nil
 }
+
+func (m *mySQL) DecreaseWalletBalance(wallet_id int64, amount int64) *utils.RestErr {
+	stmt, err := client.Prepare("UPDATE  quik.wallets SET balance = balance - ? WHERE id=?")
+
+	if err != nil {
+		logger.Error("error when trying to prepare get wallet query", err, nil)
+		return errors.NewInternalServerError("Server Error")
+	}
+
+	result, err := stmt.Exec(amount, wallet_id)
+
+	if check, _ := result.RowsAffected(); check < 1 {
+		return errors.NewNotFoundError("wallet not found")
+	}
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return errors.NewNotFoundError("wallet not found")
+		}
+		logger.Error("error when trying to credit wallet", err, nil)
+		return errors.NewInternalServerError("Server Error")
+	}
+	defer stmt.Close()
+
+	return nil
+}

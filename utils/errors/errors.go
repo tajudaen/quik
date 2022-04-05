@@ -20,3 +20,11 @@ func NewNotFoundError(message string) *utils.RestErr {
 		Err:     "not_found",
 	}
 }
+
+func NewInsufficientError(message string) *utils.RestErr {
+	return &utils.RestErr{
+		Message: message,
+		Status:  http.StatusBadRequest,
+		Err:     "bad_request",
+	}
+}
