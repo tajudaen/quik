@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"time"
 
 	"quik/logger"
+	"quik/providers/redis"
 	"quik/services/wallet"
 	"quik/types"
 	"quik/utils"
@@ -15,6 +17,7 @@ import (
 
 type WalletController struct {
 	wallet.WalletServiceInterface
+	redis.RedisInterface
 }
 
 func (w *WalletController) GetWalletBalance(c *gin.Context) {
@@ -29,6 +32,8 @@ func (w *WalletController) GetWalletBalance(c *gin.Context) {
 		utils.APIError(c, err)
 		return
 	}
+
+	w.RedisInterface.Set(c.Param("wallet_id"), *balance, 3600*time.Second)
 
 	utils.APISuccess(c, 200, gin.H{"balance": balance})
 }
@@ -67,6 +72,8 @@ func (w *WalletController) CreditWallet(c *gin.Context) {
 		return
 	}
 
+	w.RedisInterface.Delete(c.Param("wallet_id"))
+
 	utils.APISuccess(c, 200, gin.H{"message": "success"})
 }
 
@@ -103,6 +110,8 @@ func (w *WalletController) DebitWallet(c *gin.Context) {
 		utils.APIError(c, err)
 		return
 	}
+
+	w.RedisInterface.Delete(c.Param("wallet_id"))
 
 	utils.APISuccess(c, 200, gin.H{"message": "success"})
 }

@@ -17,10 +17,11 @@ var (
 	client *sql.DB
 	MySQL  database.Storage = &mySQL{}
 )
+
 const (
-	queryGetWallet              = "SELECT id, user_id, balance FROM quik.wallets WHERE id=?;"
-	queryIncreaseBalance             = "UPDATE  quik.wallets SET balance = balance + ? WHERE id=?;"
-	queryDecreaseBalance         =   "UPDATE  quik.wallets SET balance = balance - ? WHERE id=?;"
+	queryGetWallet       = "SELECT id, user_id, balance FROM quik.wallets WHERE id=?;"
+	queryIncreaseBalance = "UPDATE  quik.wallets SET balance = balance + ? WHERE id=?;"
+	queryDecreaseBalance = "UPDATE  quik.wallets SET balance = balance - ? WHERE id=?;"
 )
 
 func init() {

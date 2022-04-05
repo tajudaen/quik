@@ -18,11 +18,12 @@ var (
 )
 
 func StartApplication() {
-	registerRoutes()
 	router.Use(gin.Recovery())
 
 	router.Use(middlewares.LogsMiddleware(logger.Log))
 	router.Use(cors.Default())
+
+	registerRoutes()
 
 	router.NoRoute(func(c *gin.Context) {
 		utils.NotFoundAPIError(c)

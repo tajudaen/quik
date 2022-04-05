@@ -14,6 +14,7 @@ type Config struct {
 	MySQLPassword string
 	MySQLHost     string
 	MySQLSchema   string
+	RedisURL      string
 }
 
 var C Config
@@ -33,5 +34,6 @@ func init() {
 		MySQLPassword: os.Getenv("MySQL_PASSWORD"),
 		MySQLHost:     os.Getenv("MySQL_HOST"),
 		MySQLSchema:   os.Getenv("MySQL_SCHEMA"),
+		RedisURL:      os.Getenv("REDIS_URL"),
 	}
 }
